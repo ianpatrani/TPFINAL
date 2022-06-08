@@ -37,6 +37,10 @@ void menuBienvenida();
 void modificarCliente();
 int main()
 {
+
+
+
+
     char clientes[] = {"clientes.bin"};
     char pedidos[] = {"pedidos.bin"};
     int aux, eleccion;
