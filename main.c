@@ -38,14 +38,10 @@ void modificarCliente();
 
 int main()
 {
-
-
-
-
     char clientes[] = {"clientes.bin"};
     char pedidos[] = {"pedidos.bin"};
     int aux, eleccion;
-
+    puts("Hello world");
     // mostrarArchivo(clientes);
     // aux = login(clientes);
     mostrarArchivo(clientes);
