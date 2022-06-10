@@ -35,6 +35,7 @@ int verificarClienteYaExiste();
 void mostrarArchivo();
 void menuBienvenida();
 void modificarCliente();
+
 int main()
 {
     char clientes[] = {"clientes.bin"};
