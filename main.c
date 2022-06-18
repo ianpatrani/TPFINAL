@@ -708,8 +708,8 @@ void mostrarProducto(stProducto *unProducto)
         puts("\n\t Sin stock \n");
     }
     printf("\n\t Cantidad: %d \n", unProducto->cantidad);
-    printf("\n\t Precio unitario: %f \n", unProducto->precio);
-    printf("\n\t Subtotal: %f \n", (unProducto->precio * unProducto->cantidad));
+    printf("\n\t Precio unitario: %.2f \n", unProducto->precio);
+    printf("\n\t Subtotal: %.2f \n", (unProducto->precio * unProducto->cantidad));
 }
 
 void crearProductoAdmin(stProducto *unProducto, int idProducto)
@@ -826,6 +826,45 @@ void mostrarTodosProductosenArchivo(char archivoProductos[])
         fclose(puntFile);
     }
 }
+
+/// listado de productos para cliente
+
+void mostrarTodosProductosenArchivoClientes(char archivoProductos[])
+{
+    FILE *puntFile;
+    puntFile = fopen(archivoProductos, "rb");
+    stProducto unProducto;
+
+    if (puntFile != NULL)
+    {
+        while (fread(&unProducto, sizeof(stProducto), 1, puntFile) > 0)
+        {
+            mostrarProductoClientes(&unProducto);
+            puts("---------------------\n");
+        }
+        fclose(puntFile);
+    }
+}
+
+
+void mostrarProductoClientes(stProducto *unProducto)
+{
+
+    printf("\n\t --|| %s ||--\n", unProducto->nombreProducto);
+    printf("\n\t ID de producto: %d --\n", unProducto->idProducto);
+    printf("\n\t Categoria: %s \n", unProducto->categoria);
+    if (unProducto->hayStock == 1)
+    {
+        printf("\n\t Disponible  \n");
+    }
+    else
+    {
+        puts("\n\t Sin stock \n");
+    }
+    printf("\n\t Precio unitario: %.2f \n", unProducto->precio);
+
+}
+
 
 ///------modificar producto
 
@@ -1010,8 +1049,8 @@ int crearMenuCliente()
 {
     int opcionSeleccionada=0;
     char *titulo="Menú de Cliente";
-    char *opciones[]= {"Modificar mis datos", "Ver mis pedidos", "Hacer pedido","Cerrar sesion"};
-    int cantidadDeOpciones = 4;
+    char *opciones[]= {"Modificar mis datos", "Ver mis pedidos", "Hacer pedido","Ver Listado de Productos","Cerrar sesion"};
+    int cantidadDeOpciones = 5;
     opcionSeleccionada = gestionarMenu(titulo, opciones, cantidadDeOpciones, opcionSeleccionada);
     return opcionSeleccionada;
 }
@@ -1037,6 +1076,10 @@ void gestionarMenuClientes(int opcionSeleccionada, char clientes[], char pedidos
         break;
 
     case 3:
+        mostrarTodosProductosenArchivoClientes(productos);
+        break;
+
+    case 4:
         crearApp(clientes,pedidos,productos,idClienteActivo);
         break;
     }

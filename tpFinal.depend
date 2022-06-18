@@ -36,7 +36,7 @@
 
 1491399896 c:\users\nahue\desktop\repositorio tpfinal\tpfinal\gotoxy.h
 
-1655592574 source:c:\users\ezemi\desktop\new folder\tpfinal\main.c
+1655594809 source:c:\users\ezemi\desktop\new folder\tpfinal\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -51,4 +51,11 @@
 1655592574 c:\users\ezemi\desktop\new folder\tpfinal\pila.h
 	<stdio.h>
 	<malloc.h>
+
+1491400450 source:c:\users\ezemi\desktop\new folder\tpfinal\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1491399896 c:\users\ezemi\desktop\new folder\tpfinal\gotoxy.h
 
