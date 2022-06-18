@@ -36,3 +36,19 @@
 
 1491399896 c:\users\nahue\desktop\repositorio tpfinal\tpfinal\gotoxy.h
 
+1655592574 source:c:\users\ezemi\desktop\new folder\tpfinal\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"gotoxy.h"
+
+1655592574 source:c:\users\ezemi\desktop\new folder\tpfinal\pila.c
+	"pila.h"
+
+1655592574 c:\users\ezemi\desktop\new folder\tpfinal\pila.h
+	<stdio.h>
+	<malloc.h>
+
