@@ -13,3 +13,26 @@
 	<conio.h>
 	"pila.h"
 
+1655592010 source:c:\users\nahue\desktop\repositorio tpfinal\tpfinal\pila.c
+	"pila.h"
+
+1655592010 c:\users\nahue\desktop\repositorio tpfinal\tpfinal\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1491400450 source:c:\users\nahue\desktop\repositorio tpfinal\tpfinal\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1655592442 source:c:\users\nahue\desktop\repositorio tpfinal\tpfinal\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"gotoxy.h"
+
+1491399896 c:\users\nahue\desktop\repositorio tpfinal\tpfinal\gotoxy.h
+
