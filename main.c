@@ -75,7 +75,8 @@ int crearMenuRestaurante();
 void gestionarOpcionDeMenuRestaurante(int opcionSeleccionada, char clientes[], char pedidos[], char productos[], int *idClienteActivo, stProducto unArregloProductos[], int *validos);
 void gestionarEntreMenuAdministradorYCliente(char clientes[], char pedido[], char productos[], int rol, int *idActivo);
 int gestionarMenu(char *titulo, char *opciones[], int cantidadDeOpciones, int opcionSeleccionada);
-void volverAlMenuClientes();
+void volverAlMenuClientes(char clientes[], char pedidos[], char productos[], int *idClienteActivo);
+void volverAlMenuAdministrador(char clientes[], char pedidos[], char productos[], int *idClienteActivo);
 
 /// Productos
 void mostrarProducto(stProducto *unProducto);
@@ -381,6 +382,80 @@ int crearMenuModificarCliente()
     return opcionSeleccionada;
 }
 
+void gestionarModificarClienteAdmin(char pedidos[], char productos[], char clientes[], int *id, int opcionSeleccionada)
+{
+    stCliente cliente;
+    FILE *archivito;
+    archivito = fopen(clientes, "r+b");
+    int resultado = 0;
+    char usuario[20];
+
+    if (archivito != NULL)
+    {
+        while (fread(&cliente, sizeof(stCliente), 1, archivito) > 0)
+        {
+
+            if (cliente.idCliente == *id)
+            {
+                switch (opcionSeleccionada)
+                {
+                case 0:
+                    printf("\nIngrese nuevo nombre:");
+                    fflush(stdin);
+                    scanf("%s", cliente.nombre);
+                    fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
+                    fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuAdministrador(clientes, pedidos, productos, id);
+                    break;
+                case 1:
+                    printf("\nIngrese nuevo apellido:");
+                    fflush(stdin);
+                    scanf("%s", cliente.apellido);
+                    fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
+                    fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuAdministrador(clientes, pedidos, productos, id);
+                    break;
+                case 2:
+                    do
+                    {
+                        printf("\nIngrese nuevo usuario: ");
+                        fflush(stdin);
+                        scanf("%s", cliente.userName);
+                        resultado = verificarClienteYaExiste(clientes, cliente);
+                    } while (resultado == 0);
+                    fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
+                    fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuAdministrador(clientes, pedidos, productos, id);
+                    break;
+                case 3:
+                    printf("\nIngrese nueva password: ");
+                    fflush(stdin);
+                    scanf("%s", cliente.password);
+                    fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
+                    fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuAdministrador(clientes, pedidos, productos, id);
+                    break;
+                case 4:
+                    printf("\nIngrese nuevo mail: ");
+                    fflush(stdin);
+                    scanf("%s", cliente.mail);
+                    fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
+                    fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuAdministrador(clientes, pedidos, productos, id);
+                    break;
+                case 5:
+
+                    opcionSeleccionada = crearMenuAdministrador();
+                    gestionarOpcionDeMenuDeAdministrador(opcionSeleccionada, clientes, pedidos, productos, id);
+                    break;
+                }
+                fseek(archivito, sizeof(stCliente), SEEK_END);
+            }
+        }
+    }
+    fclose(archivito);
+}
+
 void gestionarModificarCliente(char pedidos[], char productos[], char clientes[], int *id, int opcionSeleccionada)
 {
     stCliente cliente;
@@ -404,6 +479,7 @@ void gestionarModificarCliente(char pedidos[], char productos[], char clientes[]
                     scanf("%s", cliente.nombre);
                     fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
                     fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuClientes(clientes, pedidos, productos, id);
                     break;
                 case 1:
                     printf("\nIngrese nuevo apellido:");
@@ -411,6 +487,7 @@ void gestionarModificarCliente(char pedidos[], char productos[], char clientes[]
                     scanf("%s", cliente.apellido);
                     fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
                     fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuClientes(clientes, pedidos, productos, id);
                     break;
                 case 2:
                     do
@@ -422,6 +499,7 @@ void gestionarModificarCliente(char pedidos[], char productos[], char clientes[]
                     } while (resultado == 0);
                     fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
                     fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuClientes(clientes, pedidos, productos, id);
                     break;
                 case 3:
                     printf("\nIngrese nueva password: ");
@@ -429,6 +507,7 @@ void gestionarModificarCliente(char pedidos[], char productos[], char clientes[]
                     scanf("%s", cliente.password);
                     fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
                     fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuClientes(clientes, pedidos, productos, id);
                     break;
                 case 4:
                     printf("\nIngrese nuevo mail: ");
@@ -436,6 +515,7 @@ void gestionarModificarCliente(char pedidos[], char productos[], char clientes[]
                     scanf("%s", cliente.mail);
                     fseek(archivito, (-1) * sizeof(stCliente), SEEK_CUR);
                     fwrite(&cliente, sizeof(stCliente), 1, archivito);
+                    volverAlMenuClientes(clientes, pedidos, productos, id);
                     break;
                 case 5:
 
@@ -986,9 +1066,9 @@ int crearMenuAdministrador()
     int opcionSeleccionada = 0;
     char *titulo = "Menu de administrador";
     char *opciones[] = {"Ver clientes", "Modificar clientes", "Dar de baja clientes", "Ver pedidos de un cliente", "Ver pedidos",
-                        "Modificar pedidos", "Dar de baja pedidos", "Ver listado de productos", "Agregar productos",
+                        "Dar de baja pedidos", "Ver listado de productos", "Agregar productos",
                         "Modificar productos", "Dar de baja productos", "Cerrar sesion"};
-    int cantidadDeOpciones = 12;
+    int cantidadDeOpciones = 11;
     opcionSeleccionada = gestionarMenu(titulo, opciones, cantidadDeOpciones, opcionSeleccionada);
     return opcionSeleccionada;
 }
@@ -1006,6 +1086,7 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada, char clientes[
     {
     case 0:
         MostrarArchivoClientes(clientes);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
 
         break;
     case 1:
@@ -1013,12 +1094,13 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada, char clientes[
         printf("\n---------Ingrese ID de cliente a modificar--------------\n");
         scanf("%d", &idCliente);
         opcionSeleccionadaMenuAdmin = crearMenuModificarCliente();
-        gestionarModificarCliente(pedidos, productos, clientes, &idCliente, opcionSeleccionadaMenuAdmin);
+        gestionarModificarClienteAdmin(pedidos, productos, clientes, &idCliente, opcionSeleccionadaMenuAdmin);
         break;
     case 2:
         MostrarArchivoClientes(clientes);
         bajaDeCliente(clientes);
         MostrarArchivoClientes(clientes);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
         break;
     case 3:
         MostrarArchivoClientes(clientes);
@@ -1026,19 +1108,19 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada, char clientes[
         scanf("%d", &idCliente);
 
         mostrarPedidosPorCliente(pedidos, idCliente, rol);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
         break;
+
     case 4:
-        mostrarTodosPedidosenArchivo(pedidos);
-        break;
-    case 5:
         mostrarTodosPedidosenArchivo(pedidos);
         puts("Ingrese el ID del cliente: \n");
         scanf("%d", &idCliente);
         mostrarPedidosPorCliente(pedidos, idCliente, rol);
         puts("Ingrese el id del pedido a modificar: \n");
         scanf("%d", &idPedido);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
         break;
-    case 6:
+    case 5:
         mostrarTodosPedidosenArchivo(pedidos);
         puts("Ingrese el ID del cliente: \n");
         scanf("%d", &idCliente);
@@ -1046,29 +1128,35 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada, char clientes[
         puts("Ingrese el ID del pedido a dar de baja: \n");
         scanf("%d", &idPedido);
         bajaDePedido(pedidos, idPedido);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
         break;
-    case 7:
+    case 6:
         mostrarTodosProductosenArchivo(productos);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
 
         break;
-    case 8:
+    case 7:
         crearProductoAdminyGuardarEnArchivo(&unProducto, productos);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
         break;
-    case 9:
+    case 8:
         mostrarTodosProductosenArchivo(productos);
         puts("Ingrese el id del producto a modificar: ");
         scanf("%d", &idProducto);
         modificarProductoEnArchivo(productos, idProducto);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
         break;
-    case 10:
+    case 9:
         mostrarTodosProductosenArchivo(productos);
         puts("Ingrese el id del producto a dar de baja: ");
         scanf("%d", &idProducto);
         bajaDeProducto(productos, idProducto);
+        volverAlMenuAdministrador(clientes, pedidos, productos, idActivo);
         break;
-    case 11:
+    case 10:
         opcionSeleccionada = crearMenuDeInicio();
         gestionarOpcionDeMenuDeInicio(clientes, pedidos, productos, opcionSeleccionada, idActivo);
+
         break;
     }
 }
@@ -1149,6 +1237,16 @@ void volverAlMenuClientes(char clientes[], char pedidos[], char productos[], int
     system("pause>nul");
     opcionSeleccionada = crearMenuCliente();
     gestionarMenuClientes(opcionSeleccionada, clientes, pedidos, productos, idClienteActivo);
+}
+
+void volverAlMenuAdministrador(char clientes[], char pedidos[], char productos[], int *idClienteActivo)
+{
+
+    int opcionSeleccionada;
+    puts("\nPresione cualquier tecla para regresar al menu anterior...");
+    system("pause>nul");
+    opcionSeleccionada = crearMenuAdministrador();
+    gestionarOpcionDeMenuDeAdministrador(opcionSeleccionada, clientes, pedidos, productos, idClienteActivo);
 }
 
 int crearMenuComercios()
