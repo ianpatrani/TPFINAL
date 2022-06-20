@@ -324,31 +324,29 @@ int login(char archivo[], int *idCliente)
             }
         }
     }
-    if (cliente.activo != 0)
+    if (resultadoUser == 0 && resultadoPass == 0 && cliente.activo == 1)
     {
-        if (resultadoUser == 0 && resultadoPass == 0)
-        {
-            printf("\nIngresaste con exito\n");
-            rol = cliente.rol;
-            Sleep(500);
-            *idCliente = cliente.idCliente;
-        }
-        else if (resultadoUser != 0)
-        {
-            printf("\tEL USUARIO INGRESADO NO EXISTE\n");
-            printf("\tPOR FAVOR, REGISTRE UN NUEVO USUARIO\n");
-            Sleep(1000);
-        }
-        else if (resultadoPass != 0)
-        {
-            printf("\tContrase a incorrecta\n");
-            Sleep(500);
-        }
+        printf("\nIngresaste con exito\n");
+        rol = cliente.rol;
+        Sleep(500);
+        *idCliente = cliente.idCliente;
     }
-    else
+    else if (resultadoUser != 0)
     {
-        puts("Su usuario se encuentra inactivo, comuniquese con el administrador");
+        printf("\tEL USUARIO INGRESADO NO EXISTE\n");
+        printf("\tPOR FAVOR, REGISTRE UN NUEVO USUARIO\n");
         Sleep(1000);
+    }
+    else if (resultadoPass != 0)
+    {
+        printf("\tContrase%ca incorrecta\n", 164);
+        Sleep(500);
+    }
+    else if (cliente.activo == 0)
+    {
+
+        puts("Tu cuenta se encuentra inactiva, comunicate con el administrador");
+        Sleep(2000);
     }
 
     fclose(archivito);
@@ -1029,15 +1027,58 @@ int crearMenuAdministrador()
     return opcionSeleccionada;
 }
 
+void mostrarUnSoloClienteAdmin(char archivo[])
+{
+    FILE *archivito;
+    stCliente cliente;
+    archivito = fopen(archivo, "rb");
+    int i = 0, clienteBuscar;
+
+    printf("Ingerse el ID del cliente a buscar\n");
+    scanf("%d", &clienteBuscar);
+
+    if (archivito != NULL)
+    {
+        while (fread(&cliente, sizeof(stCliente), 1, archivito) > 0)
+        {
+            if (cliente.idCliente == clienteBuscar)
+            {
+                printf("\n Registro numero %d", i++);
+                puts("\n-------------------------------------");
+                printf("\n IdCliente: %d", cliente.idCliente);
+                printf("\n Nombre: %s", cliente.nombre);
+                printf("\n Apellido: %s", cliente.apellido);
+                printf("\n Username: %s", cliente.userName);
+                printf("\n Password: %s", cliente.password);
+                printf("\n Mail: %s", cliente.mail);
+                printf("\n Genero: %c", cliente.genero);
+                printf("\n Rol: %d", cliente.rol);
+                printf("\n Activo: %d", cliente.activo);
+                puts("\n-------------------------------------");
+            }
+        }
+    }
+    fclose(archivito);
+}
+
 void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada, char clientes[], char pedidos[], char productos[], int *idActivo)
 {
     stProducto unProducto;
     system("cls");
-    int idCliente = 0, idPedido = 0, idProducto = 0, rol = 1, opcionSeleccionadaMenuAdmin = 0;
+    int idCliente = 0, idPedido = 0, idProducto = 0, rol = 1, opcionSeleccionadaMenuAdmin = 0, eleccion;
     switch (opcionSeleccionada)
     {
     case 0:
-        MostrarArchivoClientes(clientes);
+        printf("Desea ver un cliente solo o un listado? 1=uno 2=todos\n");
+        scanf("%d", &eleccion);
+        if (eleccion == 1)
+        {
+            mostrarUnSoloClienteAdmin(clientes);
+        }
+        else if (eleccion == 2)
+        {
+            MostrarArchivoClientes(clientes);
+        }
         break;
     case 1:
         MostrarArchivoClientes(clientes);
