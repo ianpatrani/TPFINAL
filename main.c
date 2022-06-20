@@ -329,7 +329,7 @@ int login(char archivo[], int *idCliente)
         }
         else if (resultadoPass != 0)
         {
-            printf("\tContrase�a incorrecta\n");
+            printf("\tContrasenia incorrecta\n");
             Sleep(500);
         }
     }
@@ -541,10 +541,12 @@ void mostrarPedido(stPedido unPedido)
     if (unPedido.pedidoAnulado == 1)
     {
         printf("\n\t Su Pedido esta activo  \n");
+        printf("\n");
     }
     else
     {
         puts("\n\t Su Pedido esta anulado  \n");
+        printf("\n");
     }
 
     mostrarProductosenArreglo(unPedido.productos, &unPedido.cantProductos);
@@ -787,19 +789,19 @@ void mostrarProducto(stProducto *unProducto)
 {
 
     printf("\n\t | %s | ", unProducto->nombreProducto);
-    printf("| ID: %d |", unProducto->idProducto);
+    printf(" | ID: %d |", unProducto->idProducto);
 
-    printf("| Categoria: %s |", unProducto->categoria);
+    printf(" | Categoria: %s | \n ", unProducto->categoria);
     if (unProducto->hayStock == 1)
     {
-        printf("| Disponible |");
+        printf(" | Disponible | \n");
     }
     else
     {
-        puts("| Sin stock |");
+        puts(" | Sin stock | \n");
     }
-    printf("| Cantidad: %d |", unProducto->cantidad);
-    printf(" | Precio unitario: %.2f |", unProducto->precio);
+    printf(" | Cantidad: %d | ", unProducto->cantidad);
+    printf(" | Precio unitario: %.2f | ", unProducto->precio);
     printf(" | Subtotal: %.2f \n", (unProducto->precio * unProducto->cantidad));
 }
 
@@ -938,32 +940,37 @@ void mostrarTodosProductosenArchivoClientes(char archivoProductos[])
 
 void mostrarProductoClientes(stProducto *unProducto)
 {
-
-    printf("\t | %s |", unProducto->nombreProducto);
-    printf("| ID:%d |", unProducto->idProducto);
-    printf(" Categoria:|%s | ", unProducto->categoria);
-    // printf(" Cantidad:|%d | ",unProducto->cantidad);
+    printf("\t| %s |", unProducto->nombreProducto);
+    puts("\n");
+    printf("\t| ID: %d |", unProducto->idProducto);
+    puts("\n");
+    printf("\t| Categoria:|%s | ", unProducto->categoria);
+    puts("\n");
     if (unProducto->hayStock == 1)
     {
-        printf(" | Disponible | ");
+        printf("\t| Disponible | ");
+        puts("\n");
     }
     else
     {
-        puts(" | Sin stock | ");
+        puts("\t| Sin stock | ");
+        puts("\n");
     }
-    printf("|Cantidad: %d |", unProducto->cantidad);
-    printf("| Precio unidad: %.2f | ", unProducto->precio);
+    printf("\t| Cantidad: %d |", unProducto->cantidad);
     puts("\n");
-    printf("| Subtotal: %.2f |\n", unProducto->precio * unProducto->cantidad);
-    // printf("\n -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* \n");
+    printf("\t| Precio unidad: %.2f | ", unProducto->precio);
+    puts("\n");
+    printf("\t| Subtotal: %.2f |\n", unProducto->precio * unProducto->cantidad);
+    puts("\n");
 }
+
 void mostrarProductoAdmin(stProducto *unProducto)
 {
 
     printf("\t | %s |", unProducto->nombreProducto);
-    printf("| ID:%d |", unProducto->idProducto);
-    printf(" Categoria:|%s | ", unProducto->categoria);
-    printf(" Cantidad:|%d | ", unProducto->cantidad);
+    printf("| ID: %d |", unProducto->idProducto);
+    printf(" Categoria: %s | ", unProducto->categoria);
+    printf(" Cantidad: %d | ", unProducto->cantidad);
     if (unProducto->hayStock == 1)
     {
         printf(" | Disponible | ");
