@@ -36,7 +36,7 @@
 
 1491399896 c:\users\nahue\desktop\repositorio tpfinal\tpfinal\gotoxy.h
 
-1655594809 source:c:\users\ezemi\desktop\new folder\tpfinal\main.c
+1655610676 source:c:\users\ezemi\desktop\new folder\tpfinal\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -58,4 +58,96 @@
 	<windows.h>
 
 1491399896 c:\users\ezemi\desktop\new folder\tpfinal\gotoxy.h
+
+1491400450 source:c:\users\ezemi\desktop\new folder\tpfinal rama alpha\tpfinal\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1655592576 source:c:\users\ezemi\desktop\new folder\tpfinal rama alpha\tpfinal\pila.c
+	"pila.h"
+
+1655592576 c:\users\ezemi\desktop\new folder\tpfinal rama alpha\tpfinal\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1655697779 source:c:\users\ezemi\desktop\new folder\tpfinal rama alpha\tpfinal\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"gotoxy.h"
+
+1491399896 c:\users\ezemi\desktop\new folder\tpfinal rama alpha\tpfinal\gotoxy.h
+
+1491400450 source:c:\users\n\desktop\utn\laboratorio y programacion\proyecto final\tpfinal rama alpha\tpfinal\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1655685320 source:c:\users\n\desktop\utn\laboratorio y programacion\proyecto final\tpfinal rama alpha\tpfinal\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"gotoxy.h"
+
+1491399896 c:\users\n\desktop\utn\laboratorio y programacion\proyecto final\tpfinal rama alpha\tpfinal\gotoxy.h
+
+1655592576 source:c:\users\n\desktop\utn\laboratorio y programacion\proyecto final\tpfinal rama alpha\tpfinal\pila.c
+	"pila.h"
+
+1655592576 c:\users\n\desktop\utn\laboratorio y programacion\proyecto final\tpfinal rama alpha\tpfinal\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1655685473 source:c:\code\tpfinal\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1655687919 source:c:\code\tpfinal\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"gotoxy.h"
+
+1655685473 c:\code\tpfinal\gotoxy.h
+
+1655685473 source:c:\code\tpfinal\pila.c
+	"pila.h"
+
+1655685473 c:\code\tpfinal\pila.h
+	<stdio.h>
+	<malloc.h>
+
+1655726920 source:c:\users\ianpa\onedrive\escritorio\tpfinal\gotoxy.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+
+1655727563 source:c:\users\ianpa\onedrive\escritorio\tpfinal\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<conio.h>
+	<time.h>
+	<windows.h>
+	"gotoxy.h"
+
+1655726920 c:\users\ianpa\onedrive\escritorio\tpfinal\gotoxy.h
+
+1655726920 source:c:\users\ianpa\onedrive\escritorio\tpfinal\pila.c
+	"pila.h"
+
+1655726920 c:\users\ianpa\onedrive\escritorio\tpfinal\pila.h
+	<stdio.h>
+	<malloc.h>
 

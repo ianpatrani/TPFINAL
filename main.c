@@ -3,7 +3,7 @@
 #include <string.h>
 #include <conio.h>
 #include <time.h>
-#include <windows.h>
+#include <windows.h> ///me deja utilizar la funcion sleep
 #include "gotoxy.h" ///me permite cambiar la posicion del cursor
 #define TeclaArriba 72
 #define TeclaAbajo 80
@@ -53,6 +53,7 @@ int cambiarOpcionSeleccionada(int teclaPulsada, int cantidadOpciones, int opcion
 void pintarPantallaConMenu(char *titulo, char *opciones[], int cantidadDeOpciones, int opcionSelecionada);
 void mostrarPantallaConMenu(char *titulo, char *opciones[], int cantidadDeOpciones, int opcionSelecionada);
 void mostrarOpcion(char *opcion, int numeroDeOpcion, int opcionSeleccionada);
+
 ///Funciones Menu
 int crearMenuModificarCliente();
 int crearMenuDeInicio();
@@ -62,19 +63,21 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada,char clientes[]
 int crearMenuCliente();
 void gestionarMenuClientes(int opcionSeleccionada, char clientes[], char pedidos[], char productos[], int * idClienteActivo);
 int crearMenuComercios();
-void gestionarOpcionDeMenuDeComercios(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo);
+void gestionarOpcionDeMenuDeComercios(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo,stProducto unArregloProductos[],int *validos);
 int crearMenuVerduleria();
-void gestionarOpcionDeMenuVerduleria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo);
+void gestionarOpcionDeMenuVerduleria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos);
 int crearMenuCarniceria();
-void gestionarOpcionDeMenuCarniceria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo);
+void gestionarOpcionDeMenuCarniceria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos);
 int crearMenuSupermercado();
-void gestionarOpcionDeMenuSupermercado(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo);
+void gestionarOpcionDeMenuSupermercado(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos);
 int crearMenuFarmacia();
-void gestionarOpcionDeMenuFarmacia(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo);
-int crearMenuCombos();
-void gestionarOpcionDeMenuCombos(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo);
-void gestionarEntreMenuAdministradorYCliente(char clientes[],char pedido[],char productos[],int rol,int idActivo);
+void gestionarOpcionDeMenuFarmacia(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos);
+int crearMenuRestaurante();
+void gestionarOpcionDeMenuRestaurante(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos);
+void gestionarEntreMenuAdministradorYCliente(char clientes[],char pedido[],char productos[],int rol,int *idActivo);
 int gestionarMenu(char *titulo, char *opciones[], int cantidadDeOpciones, int opcionSeleccionada);
+void volverAlMenuClientes();
+
 ///Productos
 void mostrarProducto(stProducto *unProducto);
 void crearProductoAdmin(stProducto *unProducto, int idProducto);
@@ -86,21 +89,30 @@ void mostrarTodosProductosenArchivo(char archivoProductos[]);
 int modificarProductoEnArchivo(char archivoProducto[], int idProducto);
 int pasarProductoDesdeArchivo(char archivoProducto[], stProducto *unProducto, int posicion);
 int bajaDeProducto(char archivoProducto[], int posProducto);
+void mostrarProductoClientes(stProducto *unProducto);
+void mostrarTodosProductosenArchivoClientes(char archivoProductos[]);
+void agregarProductoAArreglo(stProducto unArregloProducto[],char archivoProductos[], int *validos, int idProducto);
+void mostrarProductosenArreglo(stProducto unArregloProducto[], int * validos);
+float costoTotalArreglo(stProducto unArregloProductos[], int validos);
+void modificarProductoDeUnArreglo(stProducto unArregloProducto[], int *validos,int posProducto, int cantidad);
+int buscarPosProductoEnArreglo(stProducto unArregloProducto[], int *validos,int idProducto);
+
 ///Pedidos
 void mostrarPedido(stPedido unPedido);
 int pasarPedidoaArchivo(char archivoPedido[], stPedido *unPedido4, int posicion);
 int pasarPedidoPoridClienteaArreglo(int idCliente, stPedido unArregloPedidos[], int dimArreglo, char archivoPedido[]);
 int generarNumeroPedido(char archivoPedido[]);
-void crearPedido(stPedido * unPedido3, int idCliente, int idPedido);
-int crearPedidoyGuardarEnArchivo(stPedido *unPedido1, char archivoPedido[], int idCliente);
+void crearPedido(stPedido * unPedido, int idCliente, int idPedido, int validosProductos, stProducto unArregloProductos[]);
+int crearPedidoyGuardarEnArchivo(char archivoPedido[], int idCliente, int validosProductos, stProducto arregloProducto[]);
 void mostrarTodosPedidosenArchivo(char archivoPedidos[]);
-int buscarPosPedidoPoridCliente(int idCliente, int posInicial, char archivoPedido[], int vistaAdmin);
 int buscarPosPedidoPoridCliente(int idCliente, int posInicial, char archivoPedido[], int vistaAdmin);
 void mostrarPedidosPorCliente(char archivoPedido[], int idCliente, int admin); // vista admin=1
 void mostrarunPedidoEnArchivo(int pos, char archivoPedido[]);
 int modificarPedidoEnArchivo(char archivoPedidos[], int posPedido, int idCliente);
 int bajaDePedido(char archivoPedidos[], int posPedido);
 int pasarPedidoDesdeArchivo(char archivoPedido[], stPedido *unPedido4, int posicion);
+float costoTotalPedido(stPedido unPedido);
+
 ///Clientes
 int idClienteNuevo(char archivo[]);
 void bajaDeCliente(char archivo[]);
@@ -110,6 +122,7 @@ int login(char archivo[], int *idCliente);
 void MostrarArchivoClientes(char archivo[]);
 void gestionarModificarCliente(char pedidos[], char productos[],char clientes[], int *id, int opcionSeleccionada);
 void altaDeClienteAdmin(char archivo[]);
+
 int main()
 {
     char clientes[] = {"clientes.bin"};
@@ -142,6 +155,7 @@ void mostrarCorrecto(int unInt)
         puts("\nOperacion Fallida\n");
     }
 }
+
 int idClienteNuevo(char archivo[])
 {
     FILE *archi;
@@ -371,6 +385,7 @@ int crearMenuModificarCliente()
     opcionSeleccionada = gestionarMenu(titulo, opciones, cantidadDeOpciones, opcionSeleccionada);
     return opcionSeleccionada;
 }
+
 void gestionarModificarCliente(char pedidos[], char productos[],char clientes[], int *id, int opcionSeleccionada)
 {
     stCliente cliente;
@@ -378,6 +393,8 @@ void gestionarModificarCliente(char pedidos[], char productos[],char clientes[],
     archivito = fopen(clientes, "r+b");
     int resultado = 0;
     char usuario[20];
+
+
     if (archivito != NULL)
     {
         while(fread(&cliente, sizeof(stCliente), 1, archivito) > 0)
@@ -385,7 +402,6 @@ void gestionarModificarCliente(char pedidos[], char productos[],char clientes[],
 
             if (cliente.idCliente == *id)
             {
-
                 switch (opcionSeleccionada)
                 {
                 case 0:
@@ -429,8 +445,9 @@ void gestionarModificarCliente(char pedidos[], char productos[],char clientes[],
                     fwrite(&cliente, sizeof(stCliente), 1, archivito);
                     break;
                 case 5:
-                    opcionSeleccionada=crearMenuAdministrador();
-                    gestionarOpcionDeMenuDeAdministrador(opcionSeleccionada, clientes, pedidos, productos, id);
+
+                    opcionSeleccionada=crearMenuCliente();
+                    gestionarMenuClientes(opcionSeleccionada,clientes,pedidos,productos,id);
                     break;
                 }
                 fseek(archivito, sizeof(stCliente), SEEK_END);
@@ -439,6 +456,7 @@ void gestionarModificarCliente(char pedidos[], char productos[],char clientes[],
     }
     fclose(archivito);
 }
+
 ///---------------------- Funciones Pedidos --------------------------
 ///-----generales---------
 
@@ -455,9 +473,12 @@ void mostrarPedido(stPedido unPedido)
     {
         puts("\n\t Su Pedido esta anulado  \n");
     }
+
+    mostrarProductosenArreglo(unPedido.productos,&unPedido.cantProductos);
+
     printf("\n\t Fecha del pedido: %s \n", unPedido.fecha);
-    printf("\n\t Descripcion: %s \n", unPedido.descripcion);
-    printf("\n\t Costo: %f \n", unPedido.costo);
+    printf("\n\t Notas adicionales: %s \n", unPedido.descripcion);
+    printf("\n\t Importe total: %.2f \n", unPedido.costo);
 }
 
 int pasarPedidoaArchivo(char archivoPedido[], stPedido *unPedido4, int posicion)
@@ -522,29 +543,37 @@ int generarNumeroPedido(char archivoPedido[])
     return idPedido;
 }
 
-void crearPedido(stPedido * unPedido3, int idCliente, int idPedido)
+void crearPedido(stPedido * unPedido, int idCliente, int idPedido, int validosProductos, stProducto unArregloProductos[])
 {
-    unPedido3->idPedido = idPedido;
-    unPedido3->idCliente = idCliente;
+    int i =0;
+    unPedido->idPedido = idPedido;
+    unPedido->idCliente = idCliente;
+    unPedido->cantProductos =validosProductos;
+    for(i=0; i<validosProductos; i++)
+    {
+        unPedido->productos[i] = unArregloProductos[i];
+    }
     char fechaActual[12];
     generarFechaActual(fechaActual);
-    strcpy(unPedido3->fecha, fechaActual);
-    unPedido3->pedidoAnulado = 1;
+    strcpy(unPedido->fecha, fechaActual);
+    unPedido->pedidoAnulado = 1;
 
-    puts("\n\t Ingrese la descripcion del pedido: \n");
+    puts("\n\t Agregar un comentario al pedido: \n");
     fflush(stdin);
-    gets(unPedido3->descripcion);
+    gets(unPedido->descripcion);
 
-    puts("\n\t Ingrese el costo total: \n");
-    scanf("%f", &unPedido3->costo);
+    unPedido->costo = costoTotalPedido(*unPedido);
+
+
 }
 
-int crearPedidoyGuardarEnArchivo(stPedido *unPedido1, char archivoPedido[], int idCliente)
+int crearPedidoyGuardarEnArchivo(char archivoPedido[], int idCliente, int validosProductos, stProducto arregloProducto[])
 {
+    stPedido unPedido;
     int valida = 0;
     int idPedido = generarNumeroPedido(archivoPedido);
-    crearPedido(unPedido1, idCliente, idPedido);
-    valida = pasarPedidoaArchivo(archivoPedido, unPedido1, idPedido);
+    crearPedido(&unPedido, idCliente, idPedido,validosProductos, arregloProducto);
+    valida = pasarPedidoaArchivo(archivoPedido, &unPedido, idPedido);
 
     return valida;
 }
@@ -560,7 +589,7 @@ void mostrarTodosPedidosenArchivo(char archivoPedidos[])
         while (fread(&unPedido, sizeof(stPedido), 1, puntFile) > 0)
         {
             mostrarPedido(unPedido);
-            puts("---------------------\n");
+            puts("-----------------------------------------------------------------------------\n");
         }
         fclose(puntFile);
     }
@@ -574,13 +603,9 @@ int buscarPosPedidoPoridCliente(int idCliente, int posInicial, char archivoPedid
     puntFile = fopen(archivoPedido, "rb");
     int pos = -1;
     int flag = 0;
-    int a = 1;
-    int c = 1;
 
-    if (vistaAdmin == 1)
-    {
-        a = 0;
-    }
+
+
 
     if (puntFile != NULL)
     {
@@ -590,7 +615,7 @@ int buscarPosPedidoPoridCliente(int idCliente, int posInicial, char archivoPedid
         {
             if (fread(&unPedido, sizeof(stPedido), 1, puntFile) > 0)
             {
-                if (unPedido.idCliente == idCliente && (unPedido.pedidoAnulado == c || unPedido.pedidoAnulado == a))
+                if (unPedido.idCliente == idCliente)
                 {
                     pos = posInicial;
                     flag = 1;
@@ -611,17 +636,29 @@ int buscarPosPedidoPoridCliente(int idCliente, int posInicial, char archivoPedid
 void mostrarPedidosPorCliente(char archivoPedido[], int idCliente, int admin) // vista admin=1
 {
     int pos = 0;
+    int noPedido=0;
 
-    while (pos != -1)
+    noPedido=buscarPosPedidoPoridCliente(idCliente, pos, archivoPedido, admin);
+    if(noPedido==-1)
     {
-        pos = buscarPosPedidoPoridCliente(idCliente, pos, archivoPedido, admin);
-        if (pos != -1)
+        puts("No tiene pedidos cargados.");
+    }
+    else
+    {
+        while (pos != -1)
         {
-            mostrarunPedidoEnArchivo(pos, archivoPedido);
-            pos++;
+            pos = buscarPosPedidoPoridCliente(idCliente, pos, archivoPedido, admin);
+            if (pos != -1)
+            {
+                mostrarunPedidoEnArchivo(pos, archivoPedido);
+
+                pos++;
+            }
         }
     }
 }
+
+
 
 void mostrarunPedidoEnArchivo(int pos, char archivoPedido[])
 {
@@ -635,15 +672,16 @@ void mostrarunPedidoEnArchivo(int pos, char archivoPedido[])
         fseek(puntFile, pos * sizeof(stPedido), SEEK_SET);
         if (fread(&unPedido, sizeof(stPedido), 1, puntFile) > 0)
         {
-            printf("\n---Pedido n %d ----\n", pos);
+            printf("\n */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/ |Pedido n %d | */*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/*/ \n", pos);
             mostrarPedido(unPedido);
+
         }
         fclose(puntFile);
     }
 }
 
-///-------Modificar pedido-------
-
+///-------Modificar pedido-------           VEEEEEEEEEEEEEEEEER
+/*
 int modificarPedidoEnArchivo(char archivoPedidos[], int posPedido, int idCliente)
 {
     stPedido unPedido6;
@@ -653,6 +691,7 @@ int modificarPedidoEnArchivo(char archivoPedidos[], int posPedido, int idCliente
 
     return correcto;
 }
+*/
 
 ///---------- baja de pedido
 
@@ -695,21 +734,21 @@ int pasarPedidoDesdeArchivo(char archivoPedido[], stPedido *unPedido4, int posic
 void mostrarProducto(stProducto *unProducto)
 {
 
-    printf("\n\t --|| %s ||--\n", unProducto->nombreProducto);
-    printf("\n\t ID de producto: %d --\n", unProducto->idProducto);
+    printf("\n\t | %s | ", unProducto->nombreProducto);
+    printf("| ID: %d |", unProducto->idProducto);
 
-    printf("\n\t Categoria: %s \n", unProducto->categoria);
+    printf("| Categoria: %s |", unProducto->categoria);
     if (unProducto->hayStock == 1)
     {
-        printf("\n\t Disponible  \n");
+        printf("| Disponible |");
     }
     else
     {
-        puts("\n\t Sin stock \n");
+        puts("| Sin stock |");
     }
-    printf("\n\t Cantidad: %d \n", unProducto->cantidad);
-    printf("\n\t Precio unitario: %.2f \n", unProducto->precio);
-    printf("\n\t Subtotal: %.2f \n", (unProducto->precio * unProducto->cantidad));
+    printf("| Cantidad: %d |", unProducto->cantidad);
+    printf(" | Precio unitario: %.2f |", unProducto->precio);
+    printf(" | Subtotal: %.2f \n", (unProducto->precio * unProducto->cantidad));
 }
 
 void crearProductoAdmin(stProducto *unProducto, int idProducto)
@@ -821,7 +860,7 @@ void mostrarTodosProductosenArchivo(char archivoProductos[])
         while (fread(&unProducto, sizeof(stProducto), 1, puntFile) > 0)
         {
             mostrarProducto(&unProducto);
-            puts("---------------------\n");
+            puts("\n-----------------------------------------------------------------\n");
         }
         fclose(puntFile);
     }
@@ -840,7 +879,7 @@ void mostrarTodosProductosenArchivoClientes(char archivoProductos[])
         while (fread(&unProducto, sizeof(stProducto), 1, puntFile) > 0)
         {
             mostrarProductoClientes(&unProducto);
-            puts("---------------------\n");
+
         }
         fclose(puntFile);
     }
@@ -850,21 +889,45 @@ void mostrarTodosProductosenArchivoClientes(char archivoProductos[])
 void mostrarProductoClientes(stProducto *unProducto)
 {
 
-    printf("\n\t --|| %s ||--\n", unProducto->nombreProducto);
-    printf("\n\t ID de producto: %d --\n", unProducto->idProducto);
-    printf("\n\t Categoria: %s \n", unProducto->categoria);
+    printf("\t | %s |", unProducto->nombreProducto);
+    printf("| ID:%d |", unProducto->idProducto);
+    printf(" Categoria:|%s | ", unProducto->categoria);
+    //printf(" Cantidad:|%d | ",unProducto->cantidad);
     if (unProducto->hayStock == 1)
     {
-        printf("\n\t Disponible  \n");
+        printf(" | Disponible | ");
     }
     else
     {
-        puts("\n\t Sin stock \n");
+        puts(" | Sin stock | ");
     }
-    printf("\n\t Precio unitario: %.2f \n", unProducto->precio);
+    printf("|Cantidad: %d |",unProducto->cantidad);
+    printf("| Precio unidad: %.2f | ", unProducto->precio);
+    puts("\n");
+    printf("| Subtotal: %.2f |\n", unProducto->precio*unProducto->cantidad);
+    //printf("\n -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* \n");
 
 }
+void mostrarProductoAdmin(stProducto *unProducto)
+{
 
+    printf("\t | %s |", unProducto->nombreProducto);
+    printf("| ID:%d |", unProducto->idProducto);
+    printf(" Categoria:|%s | ", unProducto->categoria);
+    printf(" Cantidad:|%d | ",unProducto->cantidad);
+    if (unProducto->hayStock == 1)
+    {
+        printf(" | Disponible | ");
+    }
+    else
+    {
+        puts(" | Sin stock | ");
+    }
+    printf("| Precio unidad: %.2f |", unProducto->precio);
+    printf("| Subtotal: %.2f |", unProducto->precio*unProducto->cantidad);
+
+
+}
 
 ///------modificar producto
 
@@ -929,7 +992,6 @@ void gestionarOpcionDeMenuDeInicio(char clientes[],char pedido[],char productos[
     switch(opcionSeleccionada)
     {
     case 0:
-
         rol=login(clientes,idActivo);
         gestionarEntreMenuAdministradorYCliente(clientes,pedido,productos,rol,idActivo);
         if (rol!=0 && rol != 1)
@@ -937,8 +999,8 @@ void gestionarOpcionDeMenuDeInicio(char clientes[],char pedido[],char productos[
             opcionSeleccionadaInicio=crearMenuDeInicio();
             gestionarOpcionDeMenuDeInicio(clientes,pedido,productos,opcionSeleccionadaInicio,idActivo);
         }
-
         break;
+
     case 1:
         altaDeCliente(clientes);
         opcionSeleccionadaInicio=crearMenuDeInicio();
@@ -946,8 +1008,10 @@ void gestionarOpcionDeMenuDeInicio(char clientes[],char pedido[],char productos[
         break;
     case 2:
         printf("Hasta la proxima");
+        opcionSeleccionada=2;
         break;
     }
+
 }
 
 int crearMenuAdministrador()
@@ -971,7 +1035,7 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada,char clientes[]
     int idPedido=0;
     int idProducto=0;
     int rol=1;
-    int opcionSeleccionada2;
+    int opcionSeleccionadaMenuAdmin=0;
     switch(opcionSeleccionada)
     {
     case 0:
@@ -982,8 +1046,8 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada,char clientes[]
         MostrarArchivoClientes(clientes);
         printf("\n---------Ingrese id de cliente a modificar--------------\n");
         scanf("%d", &idCliente);
-        opcionSeleccionada2=crearMenuModificarCliente();
-        gestionarModificarCliente(pedidos, productos, clientes, &idCliente, opcionSeleccionada2);
+        opcionSeleccionadaMenuAdmin=crearMenuModificarCliente();
+        gestionarModificarCliente(pedidos, productos, clientes, &idCliente, opcionSeleccionadaMenuAdmin);
         break;
     case 2:
         MostrarArchivoClientes(clientes);
@@ -1007,7 +1071,7 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada,char clientes[]
         mostrarPedidosPorCliente(pedidos,idCliente,rol);
         puts("Ingrese el id del pedido a modificar: \n");
         scanf("%d",&idPedido);
-        modificarPedidoEnArchivo(pedidos,idPedido,idCliente);
+        //modificarPedidoEnArchivo(pedidos,idPedido,idCliente);
         break;
     case 6:
         mostrarTodosPedidosenArchivo(pedidos);
@@ -1041,16 +1105,16 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada,char clientes[]
         opcionSeleccionada=crearMenuDeInicio();
         gestionarOpcionDeMenuDeInicio(clientes,pedidos,productos,opcionSeleccionada,idActivo);
         break;
-
     }
-}
 
+}
+///---------Menu cliente
 int crearMenuCliente()
 {
     int opcionSeleccionada=0;
     char *titulo="Menú de Cliente";
-    char *opciones[]= {"Modificar mis datos", "Ver mis pedidos", "Hacer pedido","Ver Listado de Productos","Cerrar sesion"};
-    int cantidadDeOpciones = 5;
+    char *opciones[]= {"Modificar mis datos", "Ver mis pedidos", "Hacer pedido","Alta/Baja de pedido","Ver Listado de Productos","Cerrar sesion"};
+    int cantidadDeOpciones = 6;
     opcionSeleccionada = gestionarMenu(titulo, opciones, cantidadDeOpciones, opcionSeleccionada);
     return opcionSeleccionada;
 }
@@ -1059,6 +1123,11 @@ void gestionarMenuClientes(int opcionSeleccionada, char clientes[], char pedidos
 {
     int opcionSeleccionadaMenuClientes=0;
     int opcionSeleccionada2=0;
+    int pedidoFinalizado =0;
+    stProducto unArregloProductos[20];
+    int validos=0;
+
+    int i=0;
     system("cls");
     switch(opcionSeleccionada)
     {
@@ -1068,64 +1137,133 @@ void gestionarMenuClientes(int opcionSeleccionada, char clientes[], char pedidos
         break;
     case 1:
         system("cls");
-        mostrarPedidosPorCliente(pedidos,1,0);
+        mostrarPedidosPorCliente(pedidos,*idClienteActivo,0);
+        volverAlMenuClientes(clientes,pedidos,productos,idClienteActivo);
+
         break;
     case 2:
-        opcionSeleccionadaMenuClientes=crearMenuComercios();
-        gestionarOpcionDeMenuDeComercios(opcionSeleccionadaMenuClientes,clientes,pedidos,productos,idClienteActivo);
-        break;
+        do
+        {
+            opcionSeleccionadaMenuClientes=crearMenuComercios();
+            gestionarOpcionDeMenuDeComercios(opcionSeleccionadaMenuClientes,clientes,pedidos,productos,idClienteActivo,unArregloProductos,&validos);
 
+        }
+        while(pedidoFinalizado!=1);
+        volverAlMenuClientes(clientes,pedidos,productos,idClienteActivo);
+        break;
     case 3:
-        mostrarTodosProductosenArchivoClientes(productos);
+        /// anular pedido
+
+        mostrarPedidosPorCliente(pedidos,*idClienteActivo,1);
+        i=buscarPosPedidoPoridCliente(*idClienteActivo,0,pedidos,1);
+        if(i!=-1)
+        {
+            printf("\n\tIngrese el id del pedido que quiere dar de baja/alta:\n");
+            scanf("%d",&i);
+            bajaDePedido(pedidos,i);
+            mostrarPedidosPorCliente(pedidos,*idClienteActivo,1);
+            system("pause");
+        }
+        volverAlMenuClientes(clientes,pedidos,productos,idClienteActivo);
         break;
 
     case 4:
+        mostrarTodosProductosenArchivoClientes(productos);
+
+        puts("\nPresione cualquier tecla para regresar al menu anterior...");
+        system("pause>nul");
+        opcionSeleccionada2=crearMenuCliente();
+        gestionarMenuClientes(opcionSeleccionada2,clientes,pedidos,productos,idClienteActivo);
+        break;
+
+    case 5:
         crearApp(clientes,pedidos,productos,idClienteActivo);
         break;
     }
 }
+void volverAlMenuClientes(char clientes[], char pedidos[], char productos[], int * idClienteActivo)
+{
+    int opcionSeleccionada;
+    puts("\nPresione cualquier tecla para regresar al menu anterior...");
+    system("pause>nul");
+    opcionSeleccionada=crearMenuCliente();
+    gestionarMenuClientes(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+}
+
 int crearMenuComercios()
 {
     int opcionSeleccionada=0;
     char *titulo="¿Donde queres comprar?";
-    char *opciones[]= {"Verduleria", "Carniceria", "Supermercado","Farmacia","Combos Locos","Volver"};
-    int cantidadDeOpciones = 6;
+    char *opciones[]= {"Verduleria", "Carniceria", "Supermercado","Farmacia","Restaurante","Ver Carrito","Eliminar Producto de Carrito","Finalizar Compra","Volver"};
+    int cantidadDeOpciones = 9;
     opcionSeleccionada = gestionarMenu(titulo, opciones, cantidadDeOpciones, opcionSeleccionada);
 
     return opcionSeleccionada;
 }
 
-void gestionarOpcionDeMenuDeComercios(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo)
+void gestionarOpcionDeMenuDeComercios(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[],int *validos)
 {
     system("cls");
+    float total;
+    int pos;
+    int cant;
     switch(opcionSeleccionada)
     {
     case 0:
         opcionSeleccionada=crearMenuVerduleria();
-        gestionarOpcionDeMenuVerduleria(opcionSeleccionada,clientes, pedidos, productos, idClienteActivo);
+        gestionarOpcionDeMenuVerduleria(opcionSeleccionada,clientes, pedidos, productos,idClienteActivo,unArregloProductos,validos);
         break;
     case 1:
         opcionSeleccionada=crearMenuCarniceria();
-        gestionarOpcionDeMenuCarniceria(opcionSeleccionada,clientes, pedidos, productos, idClienteActivo);
+        gestionarOpcionDeMenuCarniceria(opcionSeleccionada,clientes, pedidos, productos, idClienteActivo,unArregloProductos,validos);
         break;
     case 2:
         opcionSeleccionada=crearMenuSupermercado();
-        gestionarOpcionDeMenuSupermercado(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        gestionarOpcionDeMenuSupermercado(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
         break;
 
     case 3:
         opcionSeleccionada=crearMenuFarmacia();
-        gestionarOpcionDeMenuFarmacia(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        gestionarOpcionDeMenuFarmacia(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
         break;
     case 4:
-        opcionSeleccionada=crearMenuCombos();
-        gestionarOpcionDeMenuCombos(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        opcionSeleccionada=crearMenuRestaurante();
+        gestionarOpcionDeMenuRestaurante(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
         break;
     case 5:
-        opcionSeleccionada=crearMenuCliente();
-        gestionarMenuClientes(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        ///ver carrito
+        mostrarProductosenArreglo(unArregloProductos,validos);
+        total=costoTotalArreglo(unArregloProductos,*validos);
+        printf("El costo total del pedido es: %.2f.\n",total);
+        system("pause");
+        break;
+    case 6:
+        ///eliminar producto de arreglo
+        mostrarProductosenArreglo(unArregloProductos,validos);
+        puts("\nIngrese el ID del producto que desea modificar\n");
+        scanf("%d",&pos);
+        pos=buscarPosProductoEnArreglo(unArregloProductos,validos,pos);
+        puts("\nIngrese la cantidad de unidades a anular\n");
+        scanf("%d",&cant);
+        modificarProductoDeUnArreglo(unArregloProductos,validos,pos,cant);
+        mostrarProductosenArreglo(unArregloProductos,validos);
+        system("pause");
 
         break;
+
+    case 7:
+        crearPedidoyGuardarEnArchivo(pedidos,*idClienteActivo,*validos,unArregloProductos);
+        *validos=0;
+        volverAlMenuClientes(clientes,pedidos,productos,idClienteActivo);
+        ///finalizar pedido
+        break;
+    case 8:
+        //volverAlMenuClientes(clientes,pedidos,productos,idClienteActivo);
+        *validos=0;
+        opcionSeleccionada=crearMenuCliente();
+        gestionarMenuClientes(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        break;
+
     }
 }
 int crearMenuVerduleria()
@@ -1138,39 +1276,33 @@ int crearMenuVerduleria()
     return opcionSeleccionada;
 
 }
-void gestionarOpcionDeMenuVerduleria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo)
+void gestionarOpcionDeMenuVerduleria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos)
 {
-    stProducto unProducto;
+
     system("cls");
     switch(opcionSeleccionada)
     {
     case 0:
-        ///pide cantidad;
-        ///pasa producto a arreglo;
-        ///vuelve al menu anterior;
-        puts("mostrar el producto Cebolla ");
-        puts("preguntar si agregar al carrito ");
+
+        agregarProductoAArreglo(unArregloProductos,productos,validos,0);
 
         break;
     case 1:
-        puts("mostrar el producto Papa ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,1);
         break;
     case 2:
-        // mostrarProducto()
+        agregarProductoAArreglo(unArregloProductos,productos,validos,2);
         break;
 
     case 3:
-        puts("mostrar el producto lechuga ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,3);
         break;
     case 4:
-        puts("mostrar el producto palta ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,4);
         break;
     case 5:
         opcionSeleccionada=crearMenuComercios();
-        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
         break;
     }
 
@@ -1186,38 +1318,36 @@ int crearMenuCarniceria()
     return opcionSeleccionada;
 
 }
-void gestionarOpcionDeMenuCarniceria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo)
+
+
+void gestionarOpcionDeMenuCarniceria(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos)
 {
     system("cls");
     switch(opcionSeleccionada)
     {
     case 0:
 
-        puts("mostrar el producto Milanesas ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,5);
 
         break;
     case 1:
-        puts("mostrar el producto Asado ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,6);
         break;
     case 2:
-        puts("mostrar el producto Carne Picada ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,7);
         break;
 
     case 3:
-        puts("mostrar el producto Bife de cerdo ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,8);
         break;
     case 4:
-        puts("mostrar el producto Chinchulines ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,9);
         break;
     case 5:
 
         opcionSeleccionada=crearMenuComercios();
-        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
+
         break;
     }
 }
@@ -1232,38 +1362,33 @@ int crearMenuSupermercado()
     return opcionSeleccionada;
 
 }
-void gestionarOpcionDeMenuSupermercado(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo)
+void gestionarOpcionDeMenuSupermercado(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos)
 {
     system("cls");
     switch(opcionSeleccionada)
     {
     case 0:
 
-        puts("mostrar el producto Arroz ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,10);
 
         break;
     case 1:
-        puts("mostrar el producto Yerba ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,11);
         break;
     case 2:
-        puts("mostrar el producto Servilletas ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,12);
         break;
 
     case 3:
-        puts("mostrar el producto Lentejas ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,13);
         break;
     case 4:
-        puts("mostrar el producto Coca-cola ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,14);
         break;
     case 5:
 
         opcionSeleccionada=crearMenuComercios();
-        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
         break;
     }
 }
@@ -1277,94 +1402,87 @@ int crearMenuFarmacia()
     return opcionSeleccionada;
 
 }
-void gestionarOpcionDeMenuFarmacia(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo)
+void gestionarOpcionDeMenuFarmacia(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos)
 {
     system("cls");
     switch(opcionSeleccionada)
     {
     case 0:
 
-        puts("mostrar el producto Perfume ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,15);
 
         break;
     case 1:
-        puts("mostrar el producto Cepillo dental ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,16);
         break;
     case 2:
-        puts("mostrar el producto Pasta dental ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,17);
         break;
 
     case 3:
-        puts("mostrar el producto Crema Facial ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,18);
         break;
     case 4:
-        puts("mostrar el producto Desodorante ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,19);
         break;
     case 5:
 
         opcionSeleccionada=crearMenuComercios();
-        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
         break;
     }
 }
 
-int crearMenuCombos()
+int crearMenuRestaurante()
 {
     int opcionSeleccionada=0;
-    char *titulo="Combos Locos";
-    char *opciones[]= {"Hamburguesa con Papas", "Pizza con gaseosa", "Docena de empanadas con jugo","Sushi y sake","Sanguches de miga","Volver"};
+    char *titulo="Restaurante";
+    char *opciones[]= {"Hamburguesa", "Pizza", "Empanadas","Sushi","Canelones","Volver"};
     int cantidadDeOpciones = 6;
     opcionSeleccionada = gestionarMenu(titulo, opciones, cantidadDeOpciones, opcionSeleccionada);
     return opcionSeleccionada;
 
 }
-void gestionarOpcionDeMenuCombos(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int idClienteActivo)
+void gestionarOpcionDeMenuRestaurante(int opcionSeleccionada,char clientes[],char pedidos[],char productos[],int *idClienteActivo, stProducto unArregloProductos[], int *validos)
 {
     system("cls");
     switch(opcionSeleccionada)
     {
     case 0:
 
-        puts("mostrar el producto Hamburguesa ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,20);
 
         break;
     case 1:
-        puts("mostrar el producto Pizza ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,21);
         break;
     case 2:
-        puts("mostrar el producto Empanadas ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,22);
         break;
 
     case 3:
-        puts("mostrar el producto sushi ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,23);
         break;
     case 4:
-        puts("mostrar el producto Sanguches de miga ");
-        puts("preguntar si agregar al carrito ");
+        agregarProductoAArreglo(unArregloProductos,productos,validos,24);
         break;
     case 5:
-
         opcionSeleccionada=crearMenuComercios();
-        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo);
+        gestionarOpcionDeMenuDeComercios(opcionSeleccionada,clientes,pedidos,productos,idClienteActivo,unArregloProductos,validos);
         break;
     }
 }
 void crearApp(char clientes[],char pedido[],char productos[],int *idActivo)
 {
-    int opcionsSeleccionada = crearMenuDeInicio();
-    gestionarOpcionDeMenuDeInicio(clientes,pedido,productos,opcionsSeleccionada,idActivo);
+    int opcionSeleccionada=0;
+    opcionSeleccionada = crearMenuDeInicio();
+    gestionarOpcionDeMenuDeInicio(clientes,pedido,productos,opcionSeleccionada,idActivo);
+
+
+
 }
 
-void gestionarEntreMenuAdministradorYCliente(char clientes[],char pedido[],char productos[],int rol,int idActivo)
+void gestionarEntreMenuAdministradorYCliente(char clientes[],char pedido[],char productos[],int rol,int *idActivo)
 {
     int opcionSeleccionada=0;
     if (rol==1)
@@ -1495,5 +1613,108 @@ void altaDeClienteAdmin(char archivo[])
     {
         printf("ERROR de datos - El archivo no pudo ser abierto");
     }
+}
+
+void agregarProductoAArreglo(stProducto unArregloProducto[],char archivoProductos[], int *validos, int idProducto)
+{
+    FILE * puntFile;
+    puntFile = fopen(archivoProductos,"rb");
+    stProducto unProducto;
+    int cantidad=0;
+    int opcion=0;
+
+    if(puntFile!=NULL)
+    {
+
+        fseek(puntFile,idProducto*sizeof(stProducto),SEEK_SET);
+        fread(&unProducto,sizeof(stProducto),1,puntFile);
+        fclose(puntFile);
+    }
+    mostrarProductoClientes(&unProducto);
+
+    puts("\nQuiere Agregar este producto al carrito? 1 para si, 2 para no.\n");
+    scanf("%d",&opcion);
+
+    if(opcion==1)
+    {
+        if(unProducto.hayStock==1)
+        {
+            puts("Ingrese la cantidad de unidades que desea agregar");
+            scanf("%d",&cantidad);
+            unProducto.cantidad = cantidad;
+            unArregloProducto[*validos]=unProducto;
+            (*validos)++;
+
+        }
+        else
+        {
+            puts("Producto sin Stock momentaneamente!");
+        }
+
+    }
+
+}
+
+void mostrarProductosenArreglo(stProducto unArregloProducto[], int * validos)
+{
+
+    int i =0;
+    for(i=0; i<*validos; i++)
+    {
+
+        mostrarProductoClientes(&unArregloProducto[i]);
+        puts("\n-------------------------------------------------------------------------------\n");
+    }
+
+}
+
+float costoTotalPedido(stPedido unPedido)
+{
+    float total=0;
+    for(int i=0; i<unPedido.cantProductos; i++)
+    {
+        total = total + (unPedido.productos[i].precio*unPedido.productos[i].cantidad);
+
+    }
+
+    return total;
+}
+
+float costoTotalArreglo(stProducto unArregloProductos[], int validos)
+{
+    float total=0;
+    for(int i=0; i<validos; i++)
+    {
+        total = total + (unArregloProductos[i].cantidad*unArregloProductos[i].precio);
+    }
+
+    return total;
+}
+
+void modificarProductoDeUnArreglo(stProducto unArregloProducto[], int *validos,int posProducto, int cantidad)
+{
+
+    if(cantidad<unArregloProducto[posProducto].cantidad)
+    {
+        unArregloProducto[posProducto].cantidad = unArregloProducto[posProducto].cantidad - cantidad;
+    }
+    else
+    {
+        unArregloProducto[posProducto]=unArregloProducto[*validos-1];
+        *validos=*validos-1;
+    }
+}
+int buscarPosProductoEnArreglo(stProducto unArregloProducto[], int *validos,int idProducto)
+{
+    int pos;
+    for(int i=0; i<*validos; i++)
+    {
+        if(unArregloProducto[i].idProducto==idProducto)
+        {
+            pos=i;
+        }
+
+    }
+    return pos;
 }
 
