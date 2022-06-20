@@ -445,8 +445,14 @@ void gestionarModificarCliente(char pedidos[], char productos[], char clientes[]
                     scanf("%s", cliente.mail);
                     break;
                 case 5:
-                    opcionSeleccionada = crearMenuCliente();
-                    gestionarMenuClientes(opcionSeleccionada, clientes, pedidos, productos, id);
+                    if (rol == 1)
+                    {
+                        volverAlMenuAdministrador(clientes, pedidos, productos, id);
+                    }
+                    else
+                    {
+                        volverAlMenuClientes(clientes, pedidos, productos, id);
+                    }
                     break;
                 }
 
