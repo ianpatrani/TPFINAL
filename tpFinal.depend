@@ -105,12 +105,12 @@
 	<stdio.h>
 	<malloc.h>
 
-1655685473 source:c:\code\tpfinal\gotoxy.c
+1655726920 source:c:\code\tpfinal\gotoxy.c
 	<stdio.h>
 	<stdlib.h>
 	<windows.h>
 
-1655687919 source:c:\code\tpfinal\main.c
+1655732143 source:c:\code\tpfinal\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -119,12 +119,12 @@
 	<windows.h>
 	"gotoxy.h"
 
-1655685473 c:\code\tpfinal\gotoxy.h
+1655726920 c:\code\tpfinal\gotoxy.h
 
-1655685473 source:c:\code\tpfinal\pila.c
+1655726920 source:c:\code\tpfinal\pila.c
 	"pila.h"
 
-1655685473 c:\code\tpfinal\pila.h
+1655726920 c:\code\tpfinal\pila.h
 	<stdio.h>
 	<malloc.h>
 
