@@ -967,10 +967,14 @@ void mostrarProductoClientes(stProducto *unProducto)
 void mostrarProductoAdmin(stProducto *unProducto)
 {
 
-    printf("\t | %s |", unProducto->nombreProducto);
-    printf("| ID: %d |", unProducto->idProducto);
-    printf(" Categoria: %s | ", unProducto->categoria);
-    printf(" Cantidad: %d | ", unProducto->cantidad);
+    printf("\t| %s |", unProducto->nombreProducto);
+    puts("\n");
+    printf("\t| ID: %d |", unProducto->idProducto);
+    puts("\n");
+    printf("\t| Categoria: %s | ", unProducto->categoria);
+    puts("\n");
+    printf("\t| Cantidad: %d | ", unProducto->cantidad);
+    puts("\n");
     if (unProducto->hayStock == 1)
     {
         printf(" | Disponible | ");
@@ -979,8 +983,10 @@ void mostrarProductoAdmin(stProducto *unProducto)
     {
         puts(" | Sin stock | ");
     }
-    printf("| Precio unidad: %.2f |", unProducto->precio);
-    printf("| Subtotal: %.2f |", unProducto->precio * unProducto->cantidad);
+    printf("\t| Precio unidad: %.2f |", unProducto->precio);
+    puts("\n");
+    printf("\t| Subtotal: %.2f |", unProducto->precio * unProducto->cantidad);
+    puts("\n");
 }
 
 ///------modificar producto
