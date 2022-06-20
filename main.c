@@ -1010,7 +1010,7 @@ void gestionarOpcionDeMenuDeInicio(char clientes[], char pedido[], char producto
         break;
     case 2:
         printf("Hasta la proxima");
-        opcionSeleccionada = 2;
+        exit(-1);
         break;
     }
 }
