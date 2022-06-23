@@ -729,21 +729,21 @@ int pasarPedidoDesdeArchivo(char archivoPedido[], stPedido *unPedido4, int posic
 void mostrarProducto(stProducto *unProducto)
 {
 
-    printf("\n\t | %s | ", unProducto->nombreProducto);
-    printf(" | ID: %d |", unProducto->idProducto);
+    printf("\n\t| %s | ", unProducto->nombreProducto);
+    printf("\n\t| ID: %d |", unProducto->idProducto);
 
-    printf(" | Categoria: %s | \n ", unProducto->categoria);
+    printf("\n\t| Categoria: %s | \n ", unProducto->categoria);
     if (unProducto->hayStock == 1)
     {
-        printf(" | Disponible | \n");
+        printf("\n\t| Disponible | \n");
     }
     else
     {
-        puts(" | Sin stock | \n");
+        puts("\n\t| Sin stock | \n");
     }
-    printf(" | Cantidad: %d | ", unProducto->cantidad);
-    printf(" | Precio unitario: %.2f | ", unProducto->precio);
-    printf(" | Subtotal: %.2f \n", (unProducto->precio * unProducto->cantidad));
+    printf("\n\t| Cantidad: %d | ", unProducto->cantidad);
+    printf("\n\t| Precio unitario: %.2f | ", unProducto->precio);
+    printf("\n\t| Subtotal: %.2f \n", (unProducto->precio * unProducto->cantidad));
 }
 
 void crearProductoAdmin(stProducto *unProducto, int idProducto)
@@ -1100,11 +1100,7 @@ void gestionarOpcionDeMenuDeAdministrador(int opcionSeleccionada, char clientes[
         break;
     case 4:
         mostrarTodosPedidosenArchivo(pedidos);
-        puts("Ingrese el ID del cliente: \n");
-        scanf("%d", &idCliente);
-        mostrarPedidosPorCliente(pedidos, idCliente, rol);
-        puts("Ingrese el id del pedido a modificar: \n");
-        scanf("%d", &idPedido);
+        system("pause");
         break;
     case 5:
         mostrarTodosPedidosenArchivo(pedidos);
